@@ -1,0 +1,24 @@
+version: '3.1'
+services:
+  mongodb:
+    image: mongo:4.4
+    container_name: golang-mongo
+    environment:
+      - MONGO_DATA_DIR=/data/db
+      - MONGO_LOG_DIR=/dev/null
+    volumes:
+      - MONGO_DATA:/data/db
+    ports:
+      - "27017:27017"
+    command: mongod
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - GIN_MODE=release
+      - PORT=8080
+    # depends_on:
+    #   - mongodb
+volumes:
+  MONGO_DATA:
