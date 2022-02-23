@@ -6,6 +6,8 @@ import (
 	"net/url"
 	"strconv"
 	"strings"
+
+	"github.com/spf13/viper"
 )
 
 func amountToCents(amount float32) int64 {
@@ -37,7 +39,7 @@ func CreateStripeRequest(url, successUrl, cancelUrl string, amount float32) (*ht
 		return nil, err
 	}
 
-	request.Header.Add(constants.Authorization, "Bearer stripe_secret_key")
+	request.Header.Add(constants.Authorization, viper.GetString("STRIPE_AUTHORIZATION"))
 	request.Header.Add(constants.ContentType, constants.FormUrlEnconded)
 	request.Header.Add(constants.ContentLength, strconv.Itoa(len(data.Encode())))
 

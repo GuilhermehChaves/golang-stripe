@@ -1,0 +1,17 @@
+package constants
+
+const ContentType = "Content-Type"
+const FormUrlEnconded = "application/x-www-form-urlencoded"
+const ContentLength = "Content-Length"
+const Authorization = "Authorization"
+const SuccessUrl = "success_url"
+const CancelUrl = "cancel_url"
+const Mode = "mode"
+const PaymentMethodTypes = "payment_method_types[0]"
+const LineItemsAmount = "line_items[0][amount]"
+const LineItemsCurrency = "line_items[0][currency]"
+const LineItemsName = "line_items[0][name]"
+const LineItemsQuantity = "line_items[0][quantity]"
+const CaptureMethod = "payment_intent_data[capture_method]"
+const ClientReferenceId = "client_reference_id"
+const BillingAddressCollection = "billing_address_collection"

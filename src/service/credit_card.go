@@ -2,38 +2,43 @@ package service
 
 import (
 	"apiexample/src/helper"
+	"apiexample/src/interfaces"
 	"apiexample/src/model"
 	"errors"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
+
+	"github.com/spf13/viper"
 )
 
 type StripeService struct {
-	Url string
+	Client interfaces.HttpClient
 }
 
-func NewStripeService(url string) *StripeService {
+func NewStripeService(client interfaces.HttpClient) *StripeService {
 	return &StripeService{
-		Url: url,
+		Client: client,
 	}
 }
 
 func (s *StripeService) GetUri(checkout *model.CheckoutRequest) (*model.CheckoutResponse, error) {
-	url := "https://api.stripe.com/v1/checkout/sessions"
+	request, err := helper.CreateStripeRequest(
+		viper.GetString("STRIPE_URL"),
+		checkout.SuccessUrl,
+		checkout.CancelUrl,
+		checkout.Amount,
+	)
 
-	client := new(http.Client) // &http.Client{}
-	request, err := helper.CreateStripeRequest(url, checkout.SuccessUrl, checkout.CancelUrl, checkout.Amount)
-
-	defer client.CloseIdleConnections()
+	defer s.Client.CloseIdleConnections()
 
 	if err != nil {
 		log.Printf("Error creating request: %s", err)
 		return nil, err
 	}
 
-	res, err := client.Do(request)
+	res, err := s.Client.Do(request)
 	if err != nil {
 		log.Printf("Error perfoming request to Stripe: %s", err)
 		return nil, err
